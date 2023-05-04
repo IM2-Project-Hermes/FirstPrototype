@@ -12,14 +12,13 @@ def call_open_ai(prompt):
     print(llm(prompt))
 
 
-if __name__ == '__main__':
-    while True:
-        user_input = input("What is your prompt? \n")
-        if user_input == 'exit':
-            print('Process finished')
-            break
+while True:
+    user_input = input("What is your prompt? \n")
+    if user_input == 'exit':
+        print('Process finished')
+        break
 
-        call_open_ai(user_input)
+    call_open_ai(user_input)
 
 
 
