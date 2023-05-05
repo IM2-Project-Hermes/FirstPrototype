@@ -7,12 +7,12 @@ from langchain.vectorstores import Chroma
 load_dotenv()
 
 # Read file
-with open("data/state_of_the_union.txt") as f:
-    state_of_the_union = f.read()
+with open("data/car_rent.txt") as f:
+    car_rent = f.read()
 
 # Splitting Documents in Chunks
 text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
-texts = text_splitter.split_text(state_of_the_union)
+texts = text_splitter.split_text(car_rent)
 
 # Select embedding
 embeddings = OpenAIEmbeddings()
