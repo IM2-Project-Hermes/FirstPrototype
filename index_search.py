@@ -13,8 +13,13 @@ embeddings = OpenAIEmbeddings()
 # Load Database
 db = Chroma(persist_directory="db", embedding_function=embeddings)
 
+# Create LLM
+llm = OpenAI(
+    temperature=0,
+)
+
 # Create Chain
-chain = RetrievalQAWithSourcesChain.from_chain_type(OpenAI(temperature=0), chain_type="stuff", retriever=db.as_retriever())
+chain = RetrievalQAWithSourcesChain.from_chain_type(llm, chain_type="stuff", retriever=db.as_retriever())
 
 # Get user input
 while True:
