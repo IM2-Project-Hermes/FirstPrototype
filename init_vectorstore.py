@@ -27,10 +27,17 @@ def process_file(file_path):
 
 
 # List of file paths
-file_paths = ["data/car_rent.txt", "data/state_of_the_union.txt"]
+file_paths = [
+    "data/Bestellabwicklung.md",
+    "data/Kundensupport.md",
+    "data/Onboarding.md",
+    "data/Produktentwicklung.md",
+    "data/Projektmanagement.md",
+    "data/Reklamationsmanagement.md",
+]
 
 # Splitting Documents in Chunks
-text_splitter = CharacterTextSplitter(chunk_size=200, chunk_overlap=0)
+text_splitter = CharacterTextSplitter(chunk_size=400, chunk_overlap=0)
 texts = []
 
 for file_path in file_paths:
