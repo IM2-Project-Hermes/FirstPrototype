@@ -1,30 +1,59 @@
+
 from dotenv import load_dotenv
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.vectorstores import Chroma
+from pathlib import Path
+from chromadb.config import Settings
+import chromadb
+import random
 
 # Initialize env
 load_dotenv()
 
-# Read file
-with open("data/car_rent.txt") as f:
-    car_rent = f.read()
-
-# Splitting Documents in Chunks
-text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
-texts = text_splitter.split_text(car_rent)
-
-# Select embedding
 embeddings = OpenAIEmbeddings()
 
-# Create Vectorstore to use as the Index
-db = Chroma.from_texts(
-    texts,
-    embeddings,
-    metadatas=[{"source": f"Text chunk {i} of {len(texts)}"} for i in range(len(texts))],
+# Create the database
+chroma_client = chromadb.Client(Settings(
+    chroma_db_impl="duckdb+parquet",
     persist_directory="db"
-)
+))
+collection = chroma_client.create_collection(name="documents")
+
+def process_file(file_path):
+    with open(file_path) as f:
+        text = f.read()
+    return text
+
+
+# List of file paths
+file_paths = ["data/car_rent.txt", "data/state_of_the_union.txt"]
+
+# Splitting Documents in Chunks
+text_splitter = CharacterTextSplitter(chunk_size=200, chunk_overlap=0)
+texts = []
+
+for file_path in file_paths:
+    text = process_file(file_path)
+    splitted_text = text_splitter.split_text(text)
+
+    sources = []
+    ids = []
+    for x in range(len(splitted_text)):
+        sources.append({"source": file_path})
+        ids.append(f"{random.randint(1 ,1000000)}")
+
+    collection.add(
+        documents=splitted_text,
+        metadatas=sources,
+        ids=ids
+    )
+
+    sources = []
+    text = []
+    ids = []
+    print(f"Saved {file_path}")
 
 # Save the Vectorstore
-db.persist()
-db = None
+chroma_client.persist()
+chroma_client = None
