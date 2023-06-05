@@ -16,7 +16,7 @@ embeddings = OpenAIEmbeddings()
 # Create the database
 chroma_client = chromadb.Client(Settings(
     chroma_db_impl="duckdb+parquet",
-    persist_directory="db/"
+    persist_directory="db"
 ))
 collection = chroma_client.create_collection(name="documents")
 
@@ -30,7 +30,7 @@ def process_file(file_path):
 file_paths = ["data/car_rent.txt", "data/state_of_the_union.txt"]
 
 # Splitting Documents in Chunks
-text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
+text_splitter = CharacterTextSplitter(chunk_size=200, chunk_overlap=0)
 texts = []
 
 for file_path in file_paths:

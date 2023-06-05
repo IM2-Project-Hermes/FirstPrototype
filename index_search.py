@@ -3,15 +3,21 @@ from langchain.chains import RetrievalQAWithSourcesChain
 from langchain import OpenAI
 from langchain.vectorstores import Chroma
 from langchain.embeddings.openai import OpenAIEmbeddings
+from chromadb.utils import embedding_functions
+from chromadb.config import Settings
+import chromadb
 
 # Initialize env
 load_dotenv()
 
 # Select embedding
-embeddings = OpenAIEmbeddings()
+
 
 # Load Database
-db = Chroma(persist_directory="db", embedding_function=embeddings)
+db = Chroma(
+    collection_name="documents",
+    persist_directory="db",
+)
 
 # Create LLM
 llm = OpenAI(
@@ -28,8 +34,13 @@ while True:
         print('Process finished')
         break
 
+    print(chain)
+
     # Receive Result
     result = chain({"question": user_input}, return_only_outputs=True)
+
+    print(result)
+    print("")
 
     # Output Result
     print("Answer: " + result["answer"].replace('\n', ' '))
