@@ -39,12 +39,10 @@ for file_path in file_paths:
 
     sources = []
     ids = []
-    print(len(splitted_text))
     for x in range(len(splitted_text)):
         sources.append({"source": file_path})
         ids.append(f"{random.randint(1 ,1000000)}")
 
-    print(f"${file_path}: ${len(splitted_text)}, ${len(sources)}, ${len(ids)}")
     collection.add(
         documents=splitted_text,
         metadatas=sources,
@@ -54,6 +52,7 @@ for file_path in file_paths:
     sources = []
     text = []
     ids = []
+    print(f"Saved {file_path}")
 
 # Save the Vectorstore
 chroma_client.persist()
